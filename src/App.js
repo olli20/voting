@@ -1,9 +1,9 @@
 import Vote from "./Modules/Vote/Vote";
-import "./App.css";
+import"./App.scss";
 
 function App() {
   return (
-    <div>
+    <div className='app'>
       <Vote />
     </div>
   );

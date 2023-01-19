@@ -1,6 +1,8 @@
 import { Component } from 'react';
 
-import styles from './vote.scss';
+import Button from '../../Shared/Button/Button';
+
+import styles from './vote.module.scss';
 
 class Vote extends Component {
 
@@ -15,46 +17,39 @@ class Vote extends Component {
         })
     };
 
-    getTotal() {
+    getTotalVotes() {
         const { cats, dogs } = this.state;
         return (cats + dogs);
     };
     
-    getCatsPercentage() {
-        const { cats, dogs } = this.state;
-        if (cats === 0 && dogs === 0) {
+    getPercentage(animal) {
+        const totalVotes = this.getTotalVotes();
+        if (!totalVotes) {
             return 0;
         }
-        return ((cats / (cats + dogs) * 100).toFixed(0));
-    }
-
-    getDogsPercentage() {
-        const { cats, dogs } = this.state;
-        if (cats === 0 && dogs === 0) {
-            return 0;
-        }
-        return ((dogs / (cats + dogs) * 100).toFixed(0));
+        const votes = this.state[animal];
+        return (Math.round(votes / totalVotes * 100));
     }
 
     render() {
-        const dogs = this.getDogsPercentage();
-        const cats = this.getCatsPercentage();
-        const total = this.getTotal();
+        const dogs = this.getPercentage("dogs");
+        const cats = this.getPercentage("cats");
+        const total = this.getTotalVotes();
 
         return (
-            <>
-                <div>
+            <div className={styles.vote}>
+                <div className={styles.block}>
                     <h2>Please, leave your vote</h2>
-                    <button onClick={() => this.onVote('cats')} type="button">Cats</button>
-                    <button onClick={() => this.onVote('dogs')} type="button">Dogs</button>
+                    <Button onClick={() => this.onVote('cats')} type={"button"}>Cats</Button>
+                    <Button onClick={() => this.onVote('dogs')} type={"button"}>Dogs</Button>
                 </div>
-                <div>
-                    <h2>Voting result</h2>
+                <div className={styles.block}>
+                    <h2>Voting results</h2>
                     <p>Total: {total}</p>
-                    <p>Cats: {cats}</p>
-                    <p>Dogs: {dogs}</p>
+                    <p>Cats: {cats}%</p>
+                    <p>Dogs: {dogs}%</p>
                 </div>
-            </>
+            </div>
         );
   }
 }
